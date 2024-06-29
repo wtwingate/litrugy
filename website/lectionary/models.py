@@ -1,61 +1,43 @@
 from django.db import models
 
 
-class Year(models.IntegerChoices):
-    """A model representing years in the three-year liturgical cycle.
-    Year A starts on the first Sunday of Advent in years evenly
-    divisible by 3.
-    """
-
-    A = 0
-    B = 1
-    C = 2
-
-
-class Season(models.TextChoices):
-    """A model representing the various liturgical seasons."""
-
-    ADVENT = ("AD", "Advent")
-    CHRISTMAS = ("CH", "Christmas")
-    EPIPHANY = ("EP", "Epiphany")
-    LENT = ("LE", "Lent")
-    EASTER = ("EA", "Easter")
-    PENTECOST = ("PE", "Pentecost")
-
-
-class Color(models.TextChoices):
-    """A model representing the various liturgical colors associated
-    with seasons and holy days.
-    """
-
-    WHITE = ("WH", "White")
-    RED = ("RD", "Red")
-    GREEN = ("GR", "Green")
-    VIOLET = ("VI", "Violet")
-
-
-class Rank(models.IntegerChoices):
-    """A model representing ranks of precedence for holy days in the
-    liturgical calendar.
-    """
-
-    MINOR = 0
-    MAJOR = 1
-    SUNDAY = 2
-    FIXED = 3
-    PRINCIPAL = 4
-
-
 class Day(models.Model):
     """A model representing a specific holy day within the three-year
     liturgical calendar.
     """
 
+    class Year(models.TextChoices):
+        A = ("A", "Year A")
+        B = ("B", "Year B")
+        C = ("C", "Year C")
+
+    class Season(models.TextChoices):
+        ADVENT = ("AD", "Advent")
+        CHRISTMAS = ("CH", "Christmas")
+        EPIPHANY = ("EP", "Epiphany")
+        LENT = ("LE", "Lent")
+        EASTER = ("EA", "Easter")
+        PENTECOST = ("PE", "Pentecost")
+
+    class Color(models.TextChoices):
+        WHITE = ("WH", "White")
+        RED = ("RD", "Red")
+        GREEN = ("GR", "Green")
+        VIOLET = ("VI", "Violet")
+
+    class Rank(models.IntegerChoices):
+        MINOR = (0, "Minor")
+        MAJOR = (1, "Major")
+        SUNDAY = (2, "Sunday")
+        FIXED = (3, "Fixed")
+        PRINCIPAL = (4, "Principal")
+
     name = models.CharField(max_length=100)
     alt_name = models.CharField(max_length=100, null=True, blank=True)
-    year = models.IntegerField(choices=Year)
+    year = models.CharField(max_length=1, choices=Year)
     season = models.CharField(max_length=2, choices=Season, null=True, blank=True)
-    color = models.CharField(max_length=2, choices=Color)
+    color = models.CharField(max_length=2, choices=Color, null=True, blank=True)
+    rank = models.IntegerField(choices=Rank, null=True, blank=True)
     lessons = models.ManyToManyField("Lesson")
 
     class Meta:
