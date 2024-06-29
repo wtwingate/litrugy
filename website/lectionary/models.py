@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Years(models.IntegerChoices):
+class Year(models.IntegerChoices):
     """A model representing years in the three-year liturgical cycle.
     Year A starts on the first Sunday of Advent in years evenly
     divisible by 3.
@@ -12,7 +12,7 @@ class Years(models.IntegerChoices):
     C = 2
 
 
-class Seasons(models.TextChoices):
+class Season(models.TextChoices):
     """A model representing the various liturgical seasons."""
 
     ADVENT = ("AD", "Advent")
@@ -23,7 +23,7 @@ class Seasons(models.TextChoices):
     PENTECOST = ("PE", "Pentecost")
 
 
-class Colors(models.TextChoices):
+class Color(models.TextChoices):
     """A model representing the various liturgical colors associated
     with seasons and holy days.
     """
@@ -34,7 +34,7 @@ class Colors(models.TextChoices):
     VIOLET = ("VI", "Violet")
 
 
-class Ranks(models.IntegerChoices):
+class Rank(models.IntegerChoices):
     """A model representing ranks of precedence for holy days in the
     liturgical calendar.
     """
@@ -53,13 +53,13 @@ class Day(models.Model):
 
     name = models.CharField(max_length=100)
     alt_name = models.CharField(max_length=100, null=True, blank=True)
-    year = models.IntegerField(choices=Years)
-    season = models.CharField(max_length=2, choices=Seasons, null=True, blank=True)
-    color = models.CharField(max_length=2, choices=Colors)
+    year = models.IntegerField(choices=Year)
+    season = models.CharField(max_length=2, choices=Season, null=True, blank=True)
+    color = models.CharField(max_length=2, choices=Color)
     lessons = models.ManyToManyField("Lesson")
 
     class Meta:
-        indexes = [models.Index(fields=["name", "alt_name"])]
+        indexes = [models.Index(fields=["name"])]
 
     def __str__(self):
         return f"{self.name} ({self.year})"
