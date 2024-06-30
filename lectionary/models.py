@@ -53,7 +53,7 @@ class Lesson(models.Model):
     may have alternate readings separated by " or ".
     """
 
-    scripture = models.CharField(max_length=300)
+    scripture = models.CharField(max_length=300, unique=True)
     days = models.ManyToManyField("Day")
 
     def __str__(self):
